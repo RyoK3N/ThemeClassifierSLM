@@ -1,5 +1,3 @@
-# preprocess.py
-
 import joblib
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.preprocessing import LabelEncoder

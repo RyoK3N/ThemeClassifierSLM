@@ -1,7 +1,9 @@
 # ThemeClassifierSLM
+
 ThemeClassifierSLM is an advanced LSTM-based neural network model designed for theme or topic classification in text data. This repository provides a comprehensive implementation of the model, incorporating several sophisticated techniques to enhance its performance in text analysis tasks. Leveraging positional encoding, residual connections, multi-head attention, and hyperparameter optimization with Optuna, ThemeClassifierSLM delivers robust and accurate theme classification capabilities.
 
 ## Table of Contents
+
 __Features__
 
 1. Model Overview
@@ -157,6 +159,7 @@ __2.Pretrained Embeddings:__ If glove_path is provided and valid, GloVe embeddin
 __3.Checkpointing:__ The script saves model checkpoints every N epochs and retains the best model based on validation accuracy.
 
 __Monitoring Training__
+
 During training, the script will display progress bars for each epoch and trial, along with training and validation metrics. After training, it will save:
 
 __Outputs:__

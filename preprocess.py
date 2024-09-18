@@ -29,7 +29,7 @@ def preprocess_and_save(data_dir='./data', n_topics=20, n_top_words=10, n_top_to
         'comp.sys.mac.hardware', 'comp.windows.x', 'misc.forsale', 'rec.autos', 'rec.motorcycles',
         'rec.sport.baseball', 'rec.sport.hockey', 'sci.crypt', 'sci.electronics', 'sci.med',
         'sci.space', 'soc.religion.christian', 'talk.politics.guns', 'talk.politics.mideast',
-        'talk.politics.misc', 'talk.religion.misc','rec.sport.golf','rec.sport.basketball'
+        'talk.politics.misc', 'talk.religion.misc'
     ]
 
     # loading the training and testing data

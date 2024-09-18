@@ -1,5 +1,3 @@
-# evaluate.py
-
 import os
 import argparse
 import joblib
@@ -45,7 +43,7 @@ class ThemeDataset(Dataset):
         lda_word_list = self.lda_words[idx]
         label = self.labels[idx]
 
-        # Flatten the list of lists and concatenate topic words
+        # flatten the list of lists and concatenate topic words
         lda_words_flattened = [word for sublist in lda_word_list for word in sublist]
         lda_words = " ".join(lda_words_flattened)
 
@@ -88,16 +86,16 @@ def evaluate(args):
     """
     Evaluates the trained model on the test dataset and reports performance metrics.
     """
-    # Enable logging
+    # enable logging
     logging.basicConfig(level=logging.INFO)
     global logger
     logger = logging.getLogger(__name__)
 
-    # Device configuration
+    # device configuration
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     logger.info(f"Using device: {device}")
 
-    # Load best hyperparameters
+    # loading the best hyperparameters
     if os.path.exists(args.params_path):
         best_params = joblib.load(args.params_path)
         logger.info(f"Loaded best hyperparameters from {args.params_path}")
@@ -105,26 +103,26 @@ def evaluate(args):
         logger.error(f"Best hyperparameters file not found at {args.params_path}")
         return
 
-    # Compute hidden_dim
+    # compute hidden_dim
     hidden_dim = best_params['num_heads'] * best_params['hidden_dim_multiplier']
     logger.info(f"Computed hidden_dim: {hidden_dim} (num_heads: {best_params['num_heads']}, hidden_dim_multiplier: {best_params['hidden_dim_multiplier']})")
 
-    # Load data
+    # loading the data
     data = load_data(args.data_path)
     texts = data['test_texts']
     lda_words = data['test_lda_words']
     labels = data['test_labels']
     target_names = data['target_names']
 
-    # Initialize tokenizer
+    # initialize tokenizer
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     logger.info("Tokenizer initialized")
 
-    # Create dataset and dataloader
+    # creating dataset and dataloader
     dataset = ThemeDataset(texts, lda_words, labels, tokenizer, args.max_len)
     data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
 
-    # Initialize model with best hyperparameters
+    # initializing the model with best hyperparameters
     model = get_model(
         vocab_size=tokenizer.vocab_size,
         embed_dim=best_params['embed_dim'] if 'embed_dim' in best_params else 100,
@@ -133,17 +131,17 @@ def evaluate(args):
         n_layers=best_params['n_layers'],
         bidirectional=best_params['bidirectional'],
         dropout=best_params['dropout'],
-        pretrained_embeddings=None,  # Assuming embeddings are frozen or handled during training
+        pretrained_embeddings=None,  # assuming embeddings are frozen or handled during training
         max_len=args.max_len,
         num_heads=best_params['num_heads']
     )
 
-    # Load model checkpoint
+    # loading the model checkpoint
     model = load_checkpoint(model, args.model_path, device)
     model = model.to(device)
     model.eval()
 
-    # Use DataParallel if multiple GPUs are available
+    # DataParallel for paralell processing if multiple GPUs are available
     if torch.cuda.device_count() > 1:
         logger.info(f"Using {torch.cuda.device_count()} GPUs for evaluation")
         model = nn.DataParallel(model)
@@ -151,7 +149,7 @@ def evaluate(args):
     all_preds = []
     all_labels = []
 
-    # Collect predictions
+    # collecting the predictions
     with torch.no_grad():
         progress_bar = tqdm(data_loader, desc="Evaluating", leave=False)
         for batch in progress_bar:
@@ -165,11 +163,11 @@ def evaluate(args):
             all_preds.extend(preds.cpu().numpy())
             all_labels.extend(labels_batch.cpu().numpy())
 
-    # Convert to numpy arrays
+    # converting the predictions to numpy arrays
     all_preds = np.array(all_preds)
     all_labels = np.array(all_labels)
 
-    # Compute metrics
+    # computing the metrics
     accuracy = accuracy_score(all_labels, all_preds)
     precision, recall, f1, _ = precision_recall_fscore_support(all_labels, all_preds, average='weighted')
 
@@ -178,15 +176,15 @@ def evaluate(args):
     logger.info(f"Recall: {recall:.4f}")
     logger.info(f"F1-Score: {f1:.4f}")
 
-    # Classification report
+    # classification report
     logger.info("\nClassification Report:")
     report = classification_report(all_labels, all_preds, target_names=target_names)
     print(report)
 
-    # Confusion matrix
+    # confusion matrix
     conf_matrix = confusion_matrix(all_labels, all_preds)
 
-    # Plot confusion matrix
+    # plotting the confusion matrix
     plt.figure(figsize=(12, 10))
     sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues',
                 xticklabels=target_names,

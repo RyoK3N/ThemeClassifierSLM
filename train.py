@@ -1,6 +1,3 @@
-# Train.py
-
-
 import os
 import argparse
 import joblib
@@ -27,10 +24,10 @@ def parse_args():
     parser.add_argument('--model_save_path', type=str, default='models/', help='Directory to save models and checkpoints')
     parser.add_argument('--epochs', type=int, default=20, help='Number of training epochs')
     parser.add_argument('--batch_size', type=int, default=32, help='Training batch size')
-    # Removed '--hidden_dim' since it's handled by Optuna
+    # removed '--hidden_dim' since it's handled by Optuna
     parser.add_argument('--learning_rate', type=float, default=1e-4, help='Initial learning rate')  # overridden by Optuna
     parser.add_argument('--embed_dim', type=int, default=100, help='Embedding dimension')
-    # Removed '--n_layers', '--bidirectional', '--dropout' since it's handled by Optuna
+    # removed '--n_layers', '--bidirectional', '--dropout' since it's handled by Optuna
     parser.add_argument('--n_layers', type=int, default=2, help='Number of LSTM layers')  # overridden by Optuna
     parser.add_argument('--bidirectional', action='store_true', help='Use bidirectional LSTM')  # overridden by Optuna
     parser.add_argument('--dropout', type=float, default=0.5, help='Dropout rate')  # overridden by Optuna
@@ -74,7 +71,7 @@ class ThemeDataset(Dataset):
         lda_word_list = self.lda_words[idx]
         label = self.labels[idx]
 
-        # Flatten the lists and concatenate topic words
+        # flatten the lists and concatenate topic words
         lda_words_flattened = [word for sublist in lda_word_list for word in sublist]
         lda_words = " ".join(lda_words_flattened)
 
@@ -196,7 +193,7 @@ def objective(trial, args, train_loader, val_loader, device, num_classes):
     Objective function for Optuna hyperparameter optimization.
     Ensures that hidden_dim is divisible by num_heads.
     """
-    # Hyperparameters for optimization
+    # hyperparameters for optimization
     learning_rate = trial.suggest_float('learning_rate', 1e-5, 1e-3, log=True)
     num_heads = trial.suggest_int('num_heads', 4, 12, step=2)  # Even numbers only
     hidden_dim_multiplier = trial.suggest_int('hidden_dim_multiplier', 16, 64, step=8)
@@ -205,7 +202,7 @@ def objective(trial, args, train_loader, val_loader, device, num_classes):
     dropout = trial.suggest_float('dropout', 0.3, 0.7)
     bidirectional = trial.suggest_categorical('bidirectional', [True, False])
 
-    # Initializing the model
+    # initializing the model
     model = get_model(
         vocab_size=train_loader.dataset.tokenizer.vocab_size,
         embed_dim=args.embed_dim,

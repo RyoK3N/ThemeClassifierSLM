@@ -36,6 +36,7 @@ __Comprehensive Evaluation:__ Provides detailed evaluation metrics including acc
 __User-Friendly Prediction Interface:__ Includes an interactive script for predicting themes of user-provided text inputs.
 
 ## ThemeClassifierSLM Directory Structure
+
 The ThemeClassifierSLM directory should look like this after sequentially completing the steps below : 
 
     ThemeClassifierSLM/
@@ -63,6 +64,7 @@ The ThemeClassifierSLM directory should look like this after sequentially comple
         └── README.md
 
 ## Installation 
+
 #### Prerequisites
     Python 3.7 or higher
     pip package manager
@@ -123,6 +125,7 @@ This will generate the following files in the data/ directory:
 The training script handles loading the preprocessed data, initializing the model, performing hyperparameter optimization with Optuna, and training the model.
 
 ### Steps
+
 1.Run the Training Script
 
     python train.py
@@ -171,10 +174,13 @@ __Outputs:__
 
 
 ## Evaluating the Model
+
 The evaluation script assesses the trained model's performance on the test dataset, providing comprehensive metrics and visualizations.
 
 #### Steps
+
 1.Run the Evaluation Script
+
     python evaluate.py --model_path 'models/final_model.pth'
 
 __Arguments:__

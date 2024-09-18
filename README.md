@@ -73,7 +73,7 @@ The ThemeClassifierSLM directory should look like this after sequentially comple
 #### Steps
 1.Clone the Repository
 
-    git clone https://github.com/yourusername/ThemeClassifierSLM.git
+    git clone https://github.com/RyoK3N/ThemeClassifierSLM
     cd ThemeClassifierSLM
     
 2.Create a Virtual Environment

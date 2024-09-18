@@ -1,5 +1,3 @@
-# model.py
-
 import torch
 import torch.nn as nn
 import math
@@ -74,12 +72,12 @@ class MultiHeadAttention(nn.Module):
         K = self.key(keys)
         V = self.value(values)
 
-        # Split into multiple heads
+        # split into multiple heads
         Q = Q.view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)  # [batch_size, num_heads, seq_length, head_dim]
         K = K.view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)
         V = V.view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)
 
-        # Scaled dot-product attention
+        # scaled dot-product attention
         energy = torch.matmul(Q, K.transpose(-2, -1)) / self.scale  # [batch_size, num_heads, seq_length, seq_length]
 
         if mask is not None:

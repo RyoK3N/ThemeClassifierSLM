@@ -238,7 +238,6 @@ Once the script is running, you can input sentences or words to receive theme pr
     Predicted Theme: rec.sport.basketball
 
     Input: exit
-    Notes:
 
 The script processes the input text, applies LDA topic modeling to extract relevant topics, and feeds the combined information into the model to predict the theme.
 Type exit to terminate the prediction session.
